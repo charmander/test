@@ -1,0 +1,36 @@
+{
+	"name": "@charmander/test",
+	"version": "0.1.0",
+	"description": "Basic test organization",
+	"keywords": [
+		"test"
+	],
+	"bugs": "https://github.com/charmander/test/issues",
+	"license": "ISC",
+	"author": {
+		"name": "Charmander",
+		"email": "~@charmander.me",
+		"url": "https://charmander.me/"
+	},
+	"files": [
+		"index.js",
+		"describe.js",
+		"internal/promise-terminate.js",
+		"internal/test.js",
+		"internal/run.js",
+		"internal/output.js"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/charmander/test"
+	},
+	"devDependencies": {
+		"@charmander/eslint-config-base": "1.0.3"
+	},
+	"scripts": {
+		"test": "node test"
+	},
+	"engines": {
+		"node": ">=8.0.0"
+	}
+}
