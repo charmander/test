@@ -8,4 +8,3 @@ before_script:
   - pack=$(npm pack "$tmp")
   - node -p '"sha512-" + Buffer.from(process.argv[1], "hex").toString("base64")' $(sha512sum -- "$pack")
   - tar --strip-components=1 -x -v -f "$pack"
-  - npm install
