@@ -17,6 +17,10 @@ module.exports = testModule => {
 	testModule.exports = suite;
 
 	return (name, run) => {
+		if (!Object.isExtensible(suite)) {
+			throw new Error('Can’t add tests during test run');
+		}
+
 		suite.push(new Test(name, run));
 	};
 };
