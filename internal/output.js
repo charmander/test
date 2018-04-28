@@ -11,7 +11,7 @@ module.exports = {
 			if (error instanceof Error) {
 				console.log(error.stack);
 			} else {
-				console.log('threw non-Error: %o', error);
+				console.log('threw non-Error:', error);
 			}
 		}
 	},

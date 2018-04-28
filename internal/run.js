@@ -19,14 +19,14 @@ const run = (output, tests) => {
 		terminate(
 			test.run().then(
 				() => ({test, pass: true, error: null}),
-				error => ({test, pass: false, error}),
+				error => ({test, pass: false, error})
 			),
 			result => {
 				pass += result.pass;
 				output.leave(result);
 				i++;
 				next();
-			},
+			}
 		);
 	};
 

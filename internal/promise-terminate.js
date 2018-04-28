@@ -11,7 +11,7 @@ const throwNextTick = callNextTick(error => {
 const terminate = (promise, success) => {
 	promise.then(
 		callNextTick(success),
-		throwNextTick,
+		throwNextTick
 	);
 };
 
