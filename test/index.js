@@ -38,7 +38,7 @@ test('sync single failure', async () => {
 	const error = await rejection(run('test-sync-1-failure.js'));
 	assert.strictEqual(error.code, 1);
 	assert.strictEqual(error.stderr, '\n2/3 passed\n');
-	assert.ok(/^1\n2\nAssertionError.*(\n .*)*\n3\n$/.test(error.stdout));
+	assert.ok(/^1\n2\nAssertionError.*(\n([ +-].*)?)*\n3\n$/.test(error.stdout));
 });
 
 test('sync entire failure', async () => {
@@ -46,7 +46,7 @@ test('sync entire failure', async () => {
 	assert.strictEqual(error.code, 1);
 	assert.strictEqual(error.stderr, '\n0/3 passed\n');
 	assert.deepStrictEqual(
-		error.stdout.match(/\d\nAssertionError.*(\n .*)*\n|$/yg)
+		error.stdout.match(/\d\nAssertionError.*(\n([ +-].*)?)*\n|$/yg)
 			.map(m => m.charAt(0)),
 		['1', '2', '3', ''],
 	);
@@ -63,7 +63,7 @@ test('async failure', async () => {
 	const error = await rejection(run('test-async-2-failure.js'));
 	assert.strictEqual(error.code, 1);
 	assert.strictEqual(error.stderr, '\n2/4 passed\n');
-	assert.ok(/^1\nAssertionError.*(\n .*)*\n2\n3\nAssertionError.*(\n .*)*\norder\n$/.test(error.stdout));
+	assert.ok(/^1\nAssertionError.*(\n([ +-].*)?)*\n2\n3\nAssertionError.*(\n([ +-].*)?)*\norder\n$/.test(error.stdout));
 });
 
 test('non-Error failure', async () => {
