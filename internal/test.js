@@ -13,22 +13,25 @@ class Test {
 		}
 
 		this.name = name;
-		this.run = () => {
-			let result;
+		this._run = run;
+	}
 
-			try {
-				result = run();
-			} catch (error) {
-				return Promise.reject(error);
-			}
+	run() {
+		const run = this._run;
+		let result;
 
-			if (result !== undefined && typeof result.then !== 'function') {
-				throw new TypeError('Test should return promise or undefined');
-			}
+		try {
+			result = run();
+		} catch (error) {
+			return Promise.reject(error);
+		}
 
-			return Promise.resolve(result)
-				.then(discard);
-		};
+		if (result !== undefined && typeof result.then !== 'function') {
+			throw new TypeError('Test should return promise or undefined');
+		}
+
+		return Promise.resolve(result)
+			.then(discard);
 	}
 }
 
