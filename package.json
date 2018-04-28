@@ -25,7 +25,7 @@
 		"url": "https://github.com/charmander/test"
 	},
 	"devDependencies": {
-		"@charmander/eslint-config-base": "1.0.3"
+		"@charmander/eslint-config-base": "1.1.0"
 	},
 	"scripts": {
 		"test": "node test"
