@@ -9,6 +9,8 @@ const execFile = promisify(child_process.execFile);
 
 const test = require('../')(module);
 
+const testResolvedValue = require('./test-resolved-value');
+
 const rejection = promise =>
 	promise.then(
 		() => Promise.reject(new Error('Promise did not reject')),
@@ -74,4 +76,9 @@ test('non-Error failure', async () => {
 test('long sync test list', async () => {
 	const result = await run('test-sync-overflow.js');
 	assert.strictEqual(result.stderr, '\n20000/20000 passed\n');
+});
+
+test('resolved value', async () => {
+	const result = await testResolvedValue[0].run();
+	assert.strictEqual(result, undefined);
 });

@@ -1,5 +1,7 @@
 'use strict';
 
+const discard = () => undefined;
+
 class Test {
 	constructor(name, run) {
 		if (typeof name !== 'string') {
@@ -24,7 +26,8 @@ class Test {
 				throw new TypeError('Test should return promise or undefined');
 			}
 
-			return Promise.resolve(result);
+			return Promise.resolve(result)
+				.then(discard);
 		};
 	}
 }
