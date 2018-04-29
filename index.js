@@ -4,23 +4,27 @@ const Test = require('./internal/test');
 const run = require('./internal/run');
 const defaultOutput = require('./internal/output');
 
-module.exports = testModule => {
-	const suite = [];
+let runScheduled = false;
 
-	if (testModule === require.main) {
+module.exports = testModule => {
+	if (!Array.isArray(testModule.exports)) {
+		testModule.exports = [];
+	}
+
+	if (testModule === require.main && !runScheduled) {
+		runScheduled = true;
+
 		process.nextTick(() => {
-			Object.freeze(suite);
-			run(defaultOutput, suite);
+			const tests = Object.freeze(testModule.exports);
+			run(defaultOutput, tests);
 		});
 	}
 
-	testModule.exports = suite;
-
 	return (name, run) => {
-		if (!Object.isExtensible(suite)) {
+		if (!Object.isExtensible(testModule.exports)) {
 			throw new Error('Can’t add tests during test run');
 		}
 
-		suite.push(new Test(name, run));
+		testModule.exports.push(new Test(name, run));
 	};
 };
