@@ -1,6 +1,6 @@
 {
 	"name": "@charmander/test",
-	"version": "0.3.0",
+	"version": "0.4.0-pre",
 	"description": "Basic test organization",
 	"keywords": [
 		"test"
@@ -16,7 +16,7 @@
 		"index.js",
 		"describe.js",
 		"internal/promise-terminate.js",
-		"internal/test.js",
+		"internal/test-item.js",
 		"internal/run.js",
 		"internal/output.js"
 	],

@@ -1,11 +1,11 @@
 'use strict';
 
 module.exports = {
-	enter(test) {
-		console.log(test.name);
+	enter: e => {
+		console.log(e.item.path.join(' > '));
 	},
-	leave(e) {
-		if (!e.pass) {
+	leave: e => {
+		if (e.type === 'test' && !e.pass) {
 			const {error} = e;
 
 			if (error instanceof Error) {
@@ -15,7 +15,7 @@ module.exports = {
 			}
 		}
 	},
-	done(result) {
+	done: result => {
 		const {pass, total} = result;
 
 		console.error('\n%d/%d passed', pass, total);

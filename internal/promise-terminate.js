@@ -8,10 +8,12 @@ const throwNextTick = callNextTick(error => {
 	throw error;
 });
 
-const terminate = (promise, success) => {
+const terminate = (promise, success, failure) => {
 	promise.then(
 		callNextTick(success),
-		throwNextTick
+		failure === undefined ?
+			throwNextTick :
+			callNextTick(failure)
 	);
 };
 

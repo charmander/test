@@ -2,17 +2,13 @@
 
 const discard = () => undefined;
 
-class Test {
-	constructor(name, run) {
-		if (typeof name !== 'string') {
-			throw new TypeError('Test name must be a string');
-		}
-
+class TestItem {
+	constructor(path, run) {
 		if (typeof run !== 'function') {
-			throw new TypeError('Test function must be a function');
+			throw new TypeError('Test item function must be a function');
 		}
 
-		this.name = name;
+		this.path = path;
 		this._run = run;
 	}
 
@@ -35,4 +31,4 @@ class Test {
 	}
 }
 
-module.exports = Test;
+module.exports = TestItem;

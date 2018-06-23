@@ -101,7 +101,7 @@ test('long sync test list', () =>
 );
 
 test('resolved value', () =>
-	testResolvedValue[0].run().then(result => {
+	testResolvedValue.tests[0].run().then(result => {
 		assert.strictEqual(result, undefined);
 	})
 );
