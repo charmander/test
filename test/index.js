@@ -9,7 +9,7 @@ const test = require('../')(module);
 
 const testResolvedValue = require('./test-resolved-value');
 
-const ASSERTION_ERROR = /^(?=(AssertionError[^]*?^( +)at ))\1.*\n(?:\2at .*\n)*/m;
+const ASSERTION_ERROR = /^(?=(AssertionError[^]*?^ {4}at ))\1.*\n(?: {4}at .*\n)*/m;
 
 const execFile = (file, args, options) =>
 	new Promise((resolve, reject) => {
@@ -119,6 +119,14 @@ test('non-Error failure', () =>
 		assert.strictEqual(error.code, 1);
 		assert.strictEqual(error.stderr, '\n0/1 passed\n');
 		assert.strictEqual(error.stdout, 'throws null\nthrew non-Error: null\n');
+	})
+);
+
+test('pending promise with no work left', () =>
+	rejection(run('test-async-pending-no-work.js')).then(error => {
+		assert.strictEqual(error.code, 1);
+		assert.strictEqual(error.stderr, '\n0/1 passed\n');
+		assert.ok(/^x\nError: Test promise will never resolve\n( {4}at .*\n)+$/.test(error.stdout));
 	})
 );
 
