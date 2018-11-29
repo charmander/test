@@ -3,10 +3,13 @@
 const assert = require('assert');
 const child_process = require('child_process');
 const path = require('path');
+const regexChain = require('./regex-chain');
 
 const test = require('../')(module);
 
 const testResolvedValue = require('./test-resolved-value');
+
+const ASSERTION_ERROR = /^(?=(AssertionError[^]*?^( +)at ))\1.*\n(?:\2at .*\n)*/m;
 
 const execFile = (file, args, options) =>
 	new Promise((resolve, reject) => {
@@ -53,7 +56,16 @@ test('sync single failure', () =>
 	rejection(run('test-sync-1-failure.js')).then(error => {
 		assert.strictEqual(error.code, 1);
 		assert.strictEqual(error.stderr, '\n2/3 passed\n');
-		assert.ok(/^1\n2\nAssertionError.*(\n([ +-].*)?)*\n3\n$/.test(error.stdout));
+		assert.strictEqual(
+			error.stdout.search(
+				regexChain.empty
+					.and(/^1\n/m)
+					.and(/^2\n/m).and(ASSERTION_ERROR)
+					.and(/^3\n(?![^])/m)
+					.asRegex()
+			),
+			0
+		);
 	})
 );
 
@@ -61,10 +73,16 @@ test('sync entire failure', () =>
 	rejection(run('test-sync-3-failure.js')).then(error => {
 		assert.strictEqual(error.code, 1);
 		assert.strictEqual(error.stderr, '\n0/3 passed\n');
-		assert.deepStrictEqual(
-			error.stdout.match(/\d\nAssertionError.*(\n([ +-].*)?)*\n|$/yg)
-				.map(m => m.charAt(0)),
-			['1', '2', '3', '']
+		assert.strictEqual(
+			error.stdout.search(
+				regexChain.empty
+					.and(/^1\n/m).and(ASSERTION_ERROR)
+					.and(/^2\n/m).and(ASSERTION_ERROR)
+					.and(/^3\n/m).and(ASSERTION_ERROR)
+					.and(/^(?![^])/m)
+					.asRegex()
+			),
+			0
 		);
 	})
 );
@@ -82,7 +100,17 @@ test('async failure', () =>
 	rejection(run('test-async-2-failure.js')).then(error => {
 		assert.strictEqual(error.code, 1);
 		assert.strictEqual(error.stderr, '\n2/4 passed\n');
-		assert.ok(/^1\nAssertionError.*(\n([ +-].*)?)*\n2\n3\nAssertionError.*(\n([ +-].*)?)*\norder\n$/.test(error.stdout));
+		assert.strictEqual(
+			error.stdout.search(
+				regexChain.empty
+					.and(/^1\n/m).and(ASSERTION_ERROR)
+					.and(/^2\n/m)
+					.and(/^3\n/m).and(ASSERTION_ERROR)
+					.and(/^order\n(?![^])/m)
+					.asRegex()
+			),
+			0
+		);
 	})
 );
 
