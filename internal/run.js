@@ -76,10 +76,21 @@ const run = (output, group, callback) => {
 				return;
 			}
 
+			let {pass, total} = summary;
+
 			forEach(
 				group.groups,
 				(group, callback) => {
-					run(output, group, callback);
+					run(output, group, (error, groupSummary) => {
+						if (error) {
+							callback(error);
+							return;
+						}
+
+						pass += groupSummary.pass;
+						total += groupSummary.total;
+						callback(null);
+					});
 				},
 				error => {
 					if (error) {
@@ -93,7 +104,7 @@ const run = (output, group, callback) => {
 							return;
 						}
 
-						callback(null, summary);
+						callback(null, {pass, total});
 					});
 				}
 			);
