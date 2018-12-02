@@ -30,6 +30,12 @@ const checkPush = (items, item) => {
 	items.push(item);
 };
 
+const checkNested = testGroup => {
+	if (testGroup._definingNested) {
+		throw new Error('Can’t modify a test group while a test inside it is being defined (did you remember to include `test` in its parameter list?)');
+	}
+};
+
 class TestGroup {
 	constructor(path) {
 		this.path = path;
@@ -37,13 +43,17 @@ class TestGroup {
 		this.setup = [];
 		this.teardown = [];
 		this.groups = [];
+		this._definingNested = false;
 	}
 
 	addTest(name, run) {
+		checkNested(this);
 		checkPush(this.tests, new TestItem([...this.path, name], run));
 	}
 
 	addSetup(name, run) {
+		checkNested(this);
+
 		if (run === undefined) {
 			run = name;
 			name = 'setup';
@@ -53,6 +63,8 @@ class TestGroup {
 	}
 
 	addTeardown(name, run) {
+		checkNested(this);
+
 		if (run === undefined) {
 			run = name;
 			name = 'teardown';
@@ -70,9 +82,13 @@ class TestGroup {
 			throw new Error('Can’t add groups during test run');
 		}
 
+		checkNested(this);
+
 		const group = new TestGroup([...this.path, name]);
 		this.groups.push(group);
+		this._definingNested = true;
 		contents(group._boundAddTest());
+		this._definingNested = false;
 	}
 
 	_freeze() {
