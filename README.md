@@ -1,6 +1,9 @@
-[![Build status][ci image]][ci]
-
 Organizes and runs tests.
+
+> [!WARNING]
+> Deprecated in favor of the built-in [node:test][].
+
+[node:test]: https://nodejs.org/docs/latest/api/test.html
 
 
 ## Usage
